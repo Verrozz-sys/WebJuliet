@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TKA Matematika Khusus Buat Juliet</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    background:#eef4ff;
+    min-height:100vh;
+}
+
+header{
+    background:linear-gradient(135deg,#2563eb,#3b82f6);
+    color:white;
+    padding:20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    box-shadow:0 5px 15px rgba(0,0,0,.1);
+}
+
+.logo{
+    font-size:20px;
+    font-weight:700;
+}
+
+.timer{
+    background:white;
+    color:#2563eb;
+    padding:10px 18px;
+    border-radius:12px;
+    font-weight:700;
+}
+
+.container{
+    max-width:900px;
+    margin:30px auto;
+    padding:15px;
+}
+
+.card{
+    background:white;
+    border-radius:20px;
+    padding:30px;
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+}
+
+.nomor{
+    color:#2563eb;
+    font-weight:600;
+    margin-bottom:15px;
+}
+
+.question{
+    font-size:22px;
+    margin-bottom:25px;
+    color:#1e293b;
+}
+
+.option{
+    width:100%;
+    border:none;
+    background:#e0e7ff;
+    color:#1e3a8a;
+    padding:15px;
+    margin-bottom:12px;
+    border-radius:12px;
+    cursor:pointer;
+    text-align:left;
+    font-size:16px;
+    transition:.3s;
+}
+
+.option:hover{
+    background:#2563eb;
+    color:white;
+}
+
+.option.selected{
+    background:#2563eb;
+    color:white;
+}
+
+.buttons{
+    margin-top:20px;
+    display:flex;
+    justify-content:space-between;
+}
+
+.btn{
+    border:none;
+    padding:12px 20px;
+    border-radius:10px;
+    cursor:pointer;
+    font-weight:600;
+}
+
+.prev{
+    background:#cbd5e1;
+}
+
+.next{
+    background:#2563eb;
+    color:white;
+}
+
+.result{
+    text-align:center;
+    display:none;
+}
+
+.result h1{
+    color:#2563eb;
+    margin-bottom:15px;
+}
+
+.score{
+    font-size:40px;
+    font-weight:700;
+    color:#1e293b;
+}
+
+.progress{
+    width:100%;
+    height:8px;
+    background:#dbeafe;
+    border-radius:20px;
+    margin-bottom:20px;
+}
+
+.progress-bar{
+    height:100%;
+    width:0%;
+    background:#2563eb;
+    border-radius:20px;
+}
+</style>
+</head>
+<body>
+
+<header>
+    <div class="logo">📘 TKA Matematika Agit Buat Juliet</div>
+    <div class="timer" id="timer">20:00</div>
+</header>
+
+<div class="container">
+
+    <div class="card" id="quizBox">
+
+        <div class="progress">
+            <div class="progress-bar" id="progress"></div>
+        </div>
+
+        <div class="nomor" id="nomor"></div>
+
+        <div class="question" id="question"></div>
+
+        <div id="options"></div>
+
+        <div class="buttons">
+            <button class="btn prev" onclick="prevQuestion()">Sebelumnya</button>
+            <button class="btn next" onclick="nextQuestion()">Selanjutnya</button>
+        </div>
+
+    </div>
+
+    <div class="card result" id="resultBox">
+        <h1>Tes ujian buat Juliet uda selesai yeyy</h1>
+        <p>Nilai Juliet</p>
+        <div class="score" id="score"></div>
+    </div>
+
+</div>
+
+<script>
+
+const questions = [
+{
+question:"Hasil dari 12 × 8 adalah ...",
+options:["84","96","102","108"],
+answer:1
+},
+{
+question:"Nilai x dari 3x + 6 = 21 adalah ...",
+options:["3","4","5","6"],
+answer:2
+},
+{
+question:"Akar kuadrat dari 144 adalah ...",
+options:["10","11","12","13"],
+answer:2
+},
+{
+question:"Luas persegi sisi 9 cm adalah ...",
+options:["72","81","90","99"],
+answer:1
+},
+{
+question:"25% dari 200 adalah ...",
+options:["25","50","75","100"],
+answer:1
+},
+{
+question:"Hasil dari 12 × 8 adalah ...",
+options:["84","96","102","108"],
+answer:1
+},
+{
+question:"Nilai x dari 3x + 6 = 21 adalah ...",
+options:["3","4","5","6"],
+answer:2
+},
+{
+question:"Akar kuadrat dari 144 adalah ...",
+options:["10","11","12","13"],
+answer:2
+},
+{
+question:"Luas persegi dengan sisi 9 cm adalah ...",
+options:["72","81","90","99"],
+answer:1
+},
+{
+question:"25% dari 200 adalah ...",
+options:["25","50","75","100"],
+answer:1
+},
+{
+question:"Keliling persegi sisi 7 cm adalah ...",
+options:["14","21","28","35"],
+answer:2
+},
+{
+question:"15 × 6 = ...",
+options:["80","85","90","95"],
+answer:2
+},
+{
+question:"18 + 27 = ...",
+options:["35","45","55","65"],
+answer:1
+},
+{
+question:"72 ÷ 8 = ...",
+options:["8","9","10","11"],
+answer:1
+},
+{
+question:"Bilangan prima berikut adalah ...",
+options:["9","15","17","21"],
+answer:2
+},
+{
+question:"3² + 4² = ...",
+options:["25","49","16","36"],
+answer:0
+},
+{
+question:"Nilai x dari x - 8 = 14 adalah ...",
+options:["20","22","24","26"],
+answer:1
+},
+{
+question:"40% dari 150 adalah ...",
+options:["50","55","60","65"],
+answer:2
+},
+{
+question:"FPB dari 12 dan 18 adalah ...",
+options:["4","5","6","8"],
+answer:2
+},
+{
+question:"KPK dari 6 dan 8 adalah ...",
+options:["24","36","48","12"],
+answer:0
+},
+];
+
+let current = 0;
+let answers = [];
+
+function loadQuestion(){
+
+document.getElementById("nomor").innerText =
+"Soal " + (current+1) + " dari " + questions.length;
+
+document.getElementById("question").innerText =
+questions[current].question;
+
+let html = "";
+
+questions[current].options.forEach((opt,index)=>{
+
+let selected =
+answers[current] == index ? "selected" : "";
+
+html += `
+<button class="option ${selected}"
+onclick="selectAnswer(${index})">
+${String.fromCharCode(65+index)}. ${opt}
+</button>
+`;
+
+});
+
+document.getElementById("options").innerHTML = html;
+
+document.getElementById("progress").style.width =
+((current+1)/questions.length*100)+"%";
+}
+
+function selectAnswer(index){
+answers[current]=index;
+loadQuestion();
+}
+
+function nextQuestion(){
+
+if(current < questions.length-1){
+current++;
+loadQuestion();
+}else{
+finishQuiz();
+}
+
+}
+
+function prevQuestion(){
+
+if(current > 0){
+current--;
+loadQuestion();
+}
+
+}
+
+function finishQuiz(){
+
+let score = 0;
+
+questions.forEach((q,i)=>{
+if(answers[i] == q.answer){
+score++;
+}
+});
+
+let nilai =
+Math.round(score/questions.length*100);
+
+document.getElementById("quizBox").style.display="none";
+document.getElementById("resultBox").style.display="block";
+
+document.getElementById("score").innerText =
+nilai + "/100";
+}
+
+let totalSeconds = 20*60;
+
+setInterval(()=>{
+
+let m = Math.floor(totalSeconds/60);
+let s = totalSeconds%60;
+
+document.getElementById("timer").innerText =
+String(m).padStart(2,'0') + ":" +
+String(s).padStart(2,'0');
+
+if(totalSeconds > 0){
+totalSeconds--;
+}
+
+},1000);
+
+loadQuestion();
+
+</script>
+
+</body>
+</html>
